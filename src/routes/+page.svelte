@@ -453,7 +453,7 @@
 		</p>
 		<div class="flex gap-4">
 			{#each socials as social}
-				<a href={social.url} target="_blank" rel="noopener noreferrer" class="text-text-muted transition-colors hover:text-accent">
+				<a href={social.url} target="_blank" rel="noopener noreferrer" aria-label={social.name} class="text-text-muted transition-colors hover:text-accent">
 					<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d={social.icon} /></svg>
 				</a>
 			{/each}
