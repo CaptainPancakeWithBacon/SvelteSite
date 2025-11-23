@@ -6,14 +6,16 @@
    THEME COLORS - Edit these to change the site's look
    ============================================ */
 @theme {
-	--color-bg: #0a0a0b;              /* Main background */
-	--color-bg-card: #141416;         /* Card background */
-	--color-bg-card-hover: #1a1a1e;   /* Card hover state */
-	--color-border: #2a2a2e;          /* Border color */
-	--color-text: #fafafa;            /* Main text */
-	--color-text-muted: #a1a1aa;      /* Secondary text */
-	--color-accent: #da7756;          /* Accent color (buttons, links, highlights) */
-	--color-accent-hover: #e8956f;    /* Accent hover state */
+	--color-bg: #0a0f0d;              /* Main background - dark forest */
+	--color-bg-card: #121a17;         /* Card background - forest shadow */
+	--color-bg-card-hover: #1a241f;   /* Card hover state */
+	--color-border: #2a3830;          /* Border color - mossy edge */
+	--color-text: #f0f4f0;            /* Main text - warm white */
+	--color-text-muted: #8a9a8a;      /* Secondary text - sage gray */
+	--color-accent: #5cb85c;          /* Primary accent - lush leaf green */
+	--color-accent-hover: #6fce6f;    /* Primary hover - sunlit leaf */
+	--color-secondary: #d4a574;       /* Secondary accent - warm amber */
+	--color-secondary-hover: #e4b584; /* Secondary hover */
 
 	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
@@ -102,13 +104,23 @@ body {
 	animation-delay: 2s;
 }
 
+.animate-float-slow {
+	animation: float 8s ease-in-out infinite;
+	animation-delay: 1s;
+}
+
+.animate-float-slower {
+	animation: float 10s ease-in-out infinite;
+	animation-delay: 3s;
+}
+
 .animate-pulse-glow {
 	animation: pulse-glow 3s ease-in-out infinite;
 }
 
 /* Gradient text */
 .gradient-text {
-	background: linear-gradient(135deg, var(--color-accent) 0%, #f97316 100%);
+	background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	background-clip: text;
@@ -116,7 +128,7 @@ body {
 
 /* Glass effect */
 .glass {
-	background: rgba(20, 20, 22, 0.8);
+	background: rgba(18, 26, 23, 0.8);
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
 }
