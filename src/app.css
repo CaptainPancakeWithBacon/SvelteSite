@@ -2,22 +2,23 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
-/* ============================================
-   THEME COLORS - Edit these to change the site's look
-   ============================================ */
 @theme {
-	--color-bg: #0a0f0d;              /* Main background - dark forest */
-	--color-bg-card: #121a17;         /* Card background - forest shadow */
-	--color-bg-card-hover: #1a241f;   /* Card hover state */
-	--color-border: #2a3830;          /* Border color - mossy edge */
-	--color-text: #f0f4f0;            /* Main text - warm white */
-	--color-text-muted: #8a9a8a;      /* Secondary text - sage gray */
-	--color-accent: #5cb85c;          /* Primary accent - lush leaf green */
-	--color-accent-hover: #6fce6f;    /* Primary hover - sunlit leaf */
-	--color-secondary: #d4a574;       /* Secondary accent - warm amber */
-	--color-secondary-hover: #e4b584; /* Secondary hover */
+	--color-bg: #080b10;
+	--color-bg-surface: #0c1219;
+	--color-bg-card: #0f1822;
+	--color-bg-card-hover: #141f2e;
+	--color-border: #1a2a20;
+	--color-border-bright: #2d4a38;
+	--color-text: #def0e8;
+	--color-text-muted: #5a7a68;
+	--color-accent: #6ee7b7;
+	--color-accent-hover: #34d399;
+	--color-secondary: #f59e0b;
+	--color-secondary-hover: #fbbf24;
+	--color-rare: #a78bfa;
 
 	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+	--font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 * {
@@ -37,98 +38,188 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar */
 ::-webkit-scrollbar {
-	width: 8px;
+	width: 6px;
 }
-
 ::-webkit-scrollbar-track {
 	background: var(--color-bg);
 }
-
 ::-webkit-scrollbar-thumb {
-	background: var(--color-border);
-	border-radius: 4px;
+	background: var(--color-border-bright);
+	border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-	background: var(--color-text-muted);
-}
-
-/* Selection */
 ::selection {
 	background-color: var(--color-accent);
-	color: white;
+	color: #080b10;
 }
 
-/* Bento card - clean uniform rounded corners */
-.bento-card {
-	background-color: var(--color-bg-card);
+/* ── HUD Card ── */
+.hud-card {
+	position: relative;
+	background: var(--color-bg-card);
 	border: 1px solid var(--color-border);
-	border-radius: 1.25rem;
-	transition: all 0.3s ease;
+	transition: all 0.25s ease;
 }
 
-.bento-card:hover {
-	background-color: var(--color-bg-card-hover);
+.hud-card:hover {
+	background: var(--color-bg-card-hover);
+	border-color: var(--color-border-bright);
+}
+
+.hud-card:hover .hud-corner {
 	border-color: var(--color-accent);
 }
 
-/* Animations */
-@keyframes float {
-	0%,
-	100% {
-		transform: translateY(0);
-	}
-	50% {
-		transform: translateY(-10px);
-	}
+.hud-corner {
+	position: absolute;
+	width: 14px;
+	height: 14px;
+	pointer-events: none;
+	z-index: 2;
+	border-color: var(--color-border-bright);
+	transition: border-color 0.25s ease;
+}
+.hud-corner-tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+.hud-corner-tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+.hud-corner-bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+.hud-corner-br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+
+/* ── Quest card (notched corner) ── */
+.quest-card {
+	position: relative;
+	background: var(--color-bg-card);
+	border: 1px solid var(--color-border);
+	clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%);
+	transition: background 0.25s ease;
 }
 
-@keyframes pulse-glow {
-	0%,
-	100% {
-		opacity: 0.5;
-	}
-	50% {
-		opacity: 1;
-	}
+.quest-card:hover {
+	background: var(--color-bg-card-hover);
 }
 
-.animate-float {
-	animation: float 6s ease-in-out infinite;
+.quest-card .notch {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0;
+	height: 0;
+	border-top: 28px solid var(--color-border-bright);
+	border-left: 28px solid transparent;
 }
 
-.animate-float-delayed {
-	animation: float 6s ease-in-out infinite;
-	animation-delay: 2s;
+/* ── Inventory slot ── */
+.inv-slot {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+	padding: 14px 10px 10px;
+	background: var(--color-bg-card);
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	transition: all 0.2s ease;
+	cursor: default;
+	text-align: center;
 }
 
-.animate-float-slow {
-	animation: float 8s ease-in-out infinite;
-	animation-delay: 1s;
+.inv-slot:hover {
+	transform: translateY(-3px);
 }
 
-.animate-float-slower {
-	animation: float 10s ease-in-out infinite;
-	animation-delay: 3s;
+.inv-slot.common:hover {
+	border-color: var(--color-text-muted);
+	box-shadow: 0 0 12px rgba(90, 122, 104, 0.2);
 }
 
-.animate-pulse-glow {
-	animation: pulse-glow 3s ease-in-out infinite;
+.inv-slot.uncommon {
+	border-color: rgba(110, 231, 183, 0.25);
 }
 
-/* Gradient text */
-.gradient-text {
+.inv-slot.uncommon:hover {
+	border-color: var(--color-accent);
+	box-shadow: 0 0 14px rgba(110, 231, 183, 0.25);
+}
+
+.inv-slot.rare {
+	border-color: rgba(245, 158, 11, 0.25);
+}
+
+.inv-slot.rare:hover {
+	border-color: var(--color-secondary);
+	box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+}
+
+/* ── Monospace label ── */
+.label-mono {
+	font-family: var(--font-mono);
+	font-size: 0.68rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--color-text-muted);
+}
+
+/* ── Section divider ── */
+.slash-divider {
+	width: 100%;
+	height: 48px;
+	overflow: hidden;
+	position: relative;
+}
+
+.slash-divider svg {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+}
+
+/* ── Glass nav ── */
+.glass {
+	background: rgba(8, 11, 16, 0.88);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+}
+
+/* ── Gradient text ── */
+.gem-text {
 	background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	background-clip: text;
 }
 
-/* Glass effect */
-.glass {
-	background: rgba(18, 26, 23, 0.8);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
+/* ── Animations ── */
+@keyframes float-crystal {
+	0%, 100% { transform: translateY(0px); }
+	50% { transform: translateY(-14px); }
 }
+
+@keyframes glow-ring {
+	0%, 100% { opacity: 0.2; transform: scale(1); }
+	50% { opacity: 0.5; transform: scale(1.06); }
+}
+
+@keyframes scan-line {
+	0% { transform: translateY(-100%); opacity: 0; }
+	10% { opacity: 0.6; }
+	90% { opacity: 0.6; }
+	100% { transform: translateY(800%); opacity: 0; }
+}
+
+@keyframes blink {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0; }
+}
+
+@keyframes ping-dot {
+	0% { transform: scale(1); opacity: 0.75; }
+	100% { transform: scale(2.2); opacity: 0; }
+}
+
+.animate-float-crystal { animation: float-crystal 7s ease-in-out infinite; }
+.animate-glow-ring { animation: glow-ring 4s ease-in-out infinite; }
+.animate-glow-ring-delayed { animation: glow-ring 4s ease-in-out infinite; animation-delay: 1.5s; }
+.animate-scan { animation: scan-line 6s ease-in-out infinite; animation-delay: 2s; }
+.animate-blink { animation: blink 1s step-end infinite; }
+.animate-ping-dot { animation: ping-dot 1.5s ease-out infinite; }
