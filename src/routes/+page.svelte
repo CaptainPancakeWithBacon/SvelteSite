@@ -469,7 +469,7 @@
 				<h3 class="mb-2 text-xl font-bold">WAITT Conference</h3>
 				<p class="label-mono mb-3 text-text-muted">We Are In IT Together</p>
 				<p class="mb-6 flex-1 text-text-muted">
-					The WAITT guild holds its annual tech summit every year. Hundreds of companies. Hundreds of participants. Someone has to keep it all together. Build the platform, handle the registrations, manage the sign-ups, keep the whole operation running on the day. Been on this one for over a year. Still going.
+					The WAITT guild holds its annual tech summit every year. Tens of companies. Hundreds of participants. Someone has to keep it all together. Build the platform, handle the registrations, manage the sign-ups, keep the whole operation running on the day. Been on this one for over a year. Still going.
 				</p>
 				<div class="mb-5 flex flex-wrap gap-2">
 					{#each ['Laravel', 'PHP', 'Tailwind CSS', 'Docker'] as tag}
