@@ -41,9 +41,19 @@
 <section class="relative flex min-h-screen items-center px-6 pt-24 pb-8 overflow-hidden" style="background:#0a0e16">
 
 	<!-- Cave shafts -->
-	<div class="cave-shaft" style="left:8%; top:0; width:52px; height:55%; opacity:0.7;"></div>
-	<div class="cave-shaft" style="left:34%; top:0; width:38px; height:40%; opacity:0.5;"></div>
-	<div class="cave-shaft" style="right:18%; top:0; width:64px; height:65%; opacity:0.65;"></div>
+	<div class="cave-shaft-l" style="top:22%; width:180px; height:52px; opacity:0.7;"></div>
+	<div class="shaft-support-l" style="top:22%; width:180px; height:52px;"></div>
+	<div class="shaft-lantern" style="left:80px; top:calc(22% + 8px);"></div>
+	<div class="cave-shaft-l" style="top:48%; width:140px; height:40px; opacity:0.5;"></div>
+	<div class="shaft-support-l" style="top:48%; width:140px; height:40px;"></div>
+	<div class="cave-shaft-l" style="top:70%; width:200px; height:48px; opacity:0.6;"></div>
+	<div class="shaft-support-l" style="top:70%; width:200px; height:48px;"></div>
+	<div class="shaft-lantern" style="left:90px; top:calc(70% + 8px);"></div>
+	<div class="cave-shaft-r" style="top:32%; width:160px; height:44px; opacity:0.65;"></div>
+	<div class="shaft-support-r" style="top:32%; width:160px; height:44px;"></div>
+	<div class="cave-shaft-r" style="top:58%; width:210px; height:56px; opacity:0.55;"></div>
+	<div class="shaft-support-r" style="top:58%; width:210px; height:56px;"></div>
+	<div class="shaft-lantern" style="right:100px; top:calc(58% + 8px);"></div>
 
 	<!-- Radial glow behind crystal -->
 	<div class="pointer-events-none absolute right-[5%] top-1/2 -translate-y-1/2">
@@ -170,8 +180,16 @@
 <section id="about" class="relative overflow-hidden px-6 py-20" style="background:#07090f">
 
 	<!-- Cave shafts -->
-	<div class="cave-shaft" style="left:14%; top:0; width:44px; height:50%; opacity:0.6;"></div>
-	<div class="cave-shaft" style="right:22%; top:0; width:58px; height:60%; opacity:0.55;"></div>
+	<div class="cave-shaft-l" style="top:25%; width:160px; height:46px; opacity:0.6;"></div>
+	<div class="shaft-support-l" style="top:25%; width:160px; height:46px;"></div>
+	<div class="shaft-lantern" style="left:70px; top:calc(25% + 8px);"></div>
+	<div class="cave-shaft-l" style="top:62%; width:130px; height:38px; opacity:0.45;"></div>
+	<div class="shaft-support-l" style="top:62%; width:130px; height:38px;"></div>
+	<div class="cave-shaft-r" style="top:18%; width:190px; height:50px; opacity:0.55;"></div>
+	<div class="shaft-support-r" style="top:18%; width:190px; height:50px;"></div>
+	<div class="shaft-lantern" style="right:85px; top:calc(18% + 8px);"></div>
+	<div class="cave-shaft-r" style="top:50%; width:150px; height:42px; opacity:0.5;"></div>
+	<div class="shaft-support-r" style="top:50%; width:150px; height:42px;"></div>
 
 	<!-- Ore veins — walls + mid-section -->
 	<div class="animate-ore pointer-events-none absolute" style="right:0; top:15%">
@@ -207,7 +225,7 @@
 		</svg>
 	</div>
 
-	<div class="mx-auto max-w-5xl">
+	<div class="relative mx-auto max-w-5xl">
 		<div class="mb-10 flex items-center gap-4">
 			<span class="label-mono text-accent">[ CHARACTER PROFILE ]</span>
 			<div class="ore-vein"></div>
@@ -283,10 +301,22 @@
 <section id="skills" class="relative overflow-hidden px-6 py-20" style="background:#050709">
 
 	<!-- Cave shafts — deepest level, most visible -->
-	<div class="cave-shaft" style="left:6%; top:0; width:56px; height:70%; opacity:0.8;"></div>
-	<div class="cave-shaft" style="left:28%; top:0; width:40px; height:45%; opacity:0.6;"></div>
-	<div class="cave-shaft" style="right:10%; top:0; width:68px; height:75%; opacity:0.75;"></div>
-	<div class="cave-shaft" style="right:36%; top:0; width:34px; height:38%; opacity:0.5;"></div>
+	<div class="cave-shaft-l" style="top:15%; width:200px; height:54px; opacity:0.75;"></div>
+	<div class="shaft-support-l" style="top:15%; width:200px; height:54px;"></div>
+	<div class="shaft-lantern" style="left:90px; top:calc(15% + 8px);"></div>
+	<div class="cave-shaft-l" style="top:40%; width:160px; height:44px; opacity:0.6;"></div>
+	<div class="shaft-support-l" style="top:40%; width:160px; height:44px;"></div>
+	<div class="cave-shaft-l" style="top:68%; width:220px; height:50px; opacity:0.65;"></div>
+	<div class="shaft-support-l" style="top:68%; width:220px; height:50px;"></div>
+	<div class="shaft-lantern" style="left:100px; top:calc(68% + 8px);"></div>
+	<div class="cave-shaft-r" style="top:25%; width:180px; height:48px; opacity:0.7;"></div>
+	<div class="shaft-support-r" style="top:25%; width:180px; height:48px;"></div>
+	<div class="shaft-lantern" style="right:80px; top:calc(25% + 8px);"></div>
+	<div class="cave-shaft-r" style="top:52%; width:140px; height:40px; opacity:0.55;"></div>
+	<div class="shaft-support-r" style="top:52%; width:140px; height:40px;"></div>
+	<div class="cave-shaft-r" style="top:76%; width:200px; height:52px; opacity:0.6;"></div>
+	<div class="shaft-support-r" style="top:76%; width:200px; height:52px;"></div>
+	<div class="shaft-lantern" style="right:90px; top:calc(76% + 8px);"></div>
 
 	<!-- Dense ore veins — deepest point, wall + mid-section -->
 	<div class="animate-ore pointer-events-none absolute" style="left:0; top:10%">
@@ -341,7 +371,7 @@
 		</svg>
 	</div>
 
-	<div class="mx-auto max-w-5xl">
+	<div class="relative mx-auto max-w-5xl">
 		<div class="mb-10 flex items-center gap-4">
 			<span class="label-mono text-accent">[ INVENTORY ]</span>
 			<div class="ore-vein"></div>
@@ -412,8 +442,16 @@
 <section id="projects" class="relative overflow-hidden px-6 py-20" style="background:#07090f">
 
 	<!-- Cave shafts -->
-	<div class="cave-shaft" style="left:18%; top:0; width:48px; height:55%; opacity:0.6;"></div>
-	<div class="cave-shaft" style="right:26%; top:0; width:42px; height:48%; opacity:0.55;"></div>
+	<div class="cave-shaft-l" style="top:28%; width:170px; height:48px; opacity:0.6;"></div>
+	<div class="shaft-support-l" style="top:28%; width:170px; height:48px;"></div>
+	<div class="shaft-lantern" style="left:75px; top:calc(28% + 8px);"></div>
+	<div class="cave-shaft-l" style="top:62%; width:130px; height:40px; opacity:0.45;"></div>
+	<div class="shaft-support-l" style="top:62%; width:130px; height:40px;"></div>
+	<div class="cave-shaft-r" style="top:20%; width:190px; height:52px; opacity:0.55;"></div>
+	<div class="shaft-support-r" style="top:20%; width:190px; height:52px;"></div>
+	<div class="cave-shaft-r" style="top:55%; width:150px; height:44px; opacity:0.5;"></div>
+	<div class="shaft-support-r" style="top:55%; width:150px; height:44px;"></div>
+	<div class="shaft-lantern" style="right:70px; top:calc(55% + 8px);"></div>
 
 	<!-- Ore veins — walls + mid-section -->
 	<div class="animate-ore-delay2 pointer-events-none absolute" style="left:0; top:25%">
@@ -454,7 +492,7 @@
 		</svg>
 	</div>
 
-	<div class="mx-auto max-w-5xl">
+	<div class="relative mx-auto max-w-5xl">
 		<div class="mb-10 flex items-center gap-4">
 			<span class="label-mono text-accent">[ QUEST LOG ]</span>
 			<div class="ore-vein"></div>
