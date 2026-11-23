@@ -222,12 +222,31 @@ footer p {
 	margin: 0;
 }
 
-.card-img {
-	display: block;
-	width: 100%;
-	height: auto;
-	margin-top: 32px;
-	border-radius: 8px;
+.stats {
+	display: flex;
+	gap: 40px;
+	margin: 32px 0 0;
+	padding-top: 20px;
+	border-top: 1px solid var(--border);
+}
+
+.stats dd {
+	margin: 0;
+	font-size: 1.5rem;
+	font-weight: 600;
+	line-height: 1.2;
+	color: var(--text);
+}
+
+.stats dt {
+	font-size: 0.85rem;
+	color: var(--muted);
+}
+
+.latest {
+	margin: 16px 0 0;
+	font-size: 0.9rem;
+	color: var(--muted);
 }
 
 .card {
