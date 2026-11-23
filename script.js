@@ -1,23 +1,23 @@
-// This file fills in the live parts of the page.
-// If anything fails (no internet, API limit), the page still shows the numbers written in index.html.
+// Fills in the live stuff on the page.
+// If something breaks, the html still has fallback numbers. Nobody will ever know.
 
 // ---------- Settings ----------
 
 var githubUser = "CaptainPancakeWithBacon";
 
-// Last.fm is used for the "Listening to" line. The key is read-only, so it is fine to show it here.
+// Last.fm for the music line. Key is read-only so showing it is fine. I checked.
 var lastfmUser = "SirAdolphus";
 var lastfmKey = "fc5db5a97c8f06566f3fe096547697e6";
 
-// Colors for the language bar, one per language.
+// One color per language
 var barColors = ["#58a6ff", "#3fb950", "#e07b28", "#7b5fc4", "#c8402f"];
 
-// If the visitor turned off animations in their system, we skip ours.
+// Some people turn animations off. Respect that.
 var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// ---------- Small helper functions ----------
+// ---------- Helpers ----------
 
-// Download some JSON from a url.
+// Gets json. That's it.
 function getJson(url) {
   return fetch(url).then(function (response) {
     if (!response.ok) {
@@ -27,12 +27,12 @@ function getJson(url) {
   });
 }
 
-// Put text inside the element with this id.
+// Puts text in an element
 function setText(id, text) {
   document.getElementById(id).textContent = text;
 }
 
-// Turn a date into "today", "yesterday" or "5 days ago".
+// Date to "today", "yesterday" or "5 days ago"
 function timeAgo(dateString) {
   var then = new Date(dateString);
   var millisecondsPerDay = 1000 * 60 * 60 * 24;
@@ -47,7 +47,7 @@ function timeAgo(dateString) {
   return days + " days ago";
 }
 
-// Make text safe to put inside HTML (so a song called "<b>" can't break the page).
+// So a song called <b> can't wreck the page
 function escapeHtml(text) {
   text = text.replace(/&/g, "&amp;");
   text = text.replace(/</g, "&lt;");
@@ -56,7 +56,7 @@ function escapeHtml(text) {
   return text;
 }
 
-// Count a number up from 0 to the target, so the stats move a little when the page loads.
+// Numbers count up from 0. Totally necessary.
 function countUp(id, target) {
   var element = document.getElementById(id);
 
@@ -65,7 +65,7 @@ function countUp(id, target) {
     return;
   }
 
-  var duration = 700; // milliseconds
+  var duration = 700; // ms
   var startTime = performance.now();
 
   function step(now) {
@@ -73,7 +73,7 @@ function countUp(id, target) {
     if (progress > 1) {
       progress = 1;
     }
-    // This makes it start fast and slow down at the end.
+    // fast at the start, slow at the end
     var eased = 1 - Math.pow(1 - progress, 3);
     element.textContent = Math.round(target * eased);
 
@@ -85,7 +85,7 @@ function countUp(id, target) {
   requestAnimationFrame(step);
 }
 
-// ---------- The clock ----------
+// ---------- Clock ----------
 
 function updateClock() {
   var time = new Date().toLocaleTimeString("en-GB", {
@@ -97,9 +97,9 @@ function updateClock() {
 }
 
 updateClock();
-setInterval(updateClock, 30000); // every 30 seconds
+setInterval(updateClock, 30000); // every 30 sec
 
-// ---------- GitHub: followers and repository count ----------
+// ---------- GitHub: profile numbers ----------
 
 getJson("https://api.github.com/users/" + githubUser)
   .then(function (user) {
@@ -107,12 +107,12 @@ getJson("https://api.github.com/users/" + githubUser)
     countUp("s-followers", user.followers);
   })
   .catch(function () {
-    // Do nothing, the numbers in the HTML stay.
+    // nothing, the html numbers stay
   });
 
-// ---------- GitHub: repositories ----------
+// ---------- GitHub: repos ----------
 
-// Add up the stars of all repositories.
+// Add up all the stars. There aren't many.
 function showStars(repos) {
   var total = 0;
   for (var i = 0; i < repos.length; i++) {
@@ -121,17 +121,17 @@ function showStars(repos) {
   countUp("s-stars", total);
 }
 
-// Show the 4 most recently pushed repositories.
+// The 4 latest pushes
 function showRecent(repos) {
   var others = [];
   for (var i = 0; i < repos.length; i++) {
-    // The profile repo is skipped because that is just the card bot committing.
+    // skip the profile repo, that's just the card bot
     if (repos[i].name !== githubUser) {
       others.push(repos[i]);
     }
   }
 
-  // Newest push first.
+  // newest first
   others.sort(function (a, b) {
     return new Date(b.pushed_at) - new Date(a.pushed_at);
   });
@@ -147,14 +147,14 @@ function showRecent(repos) {
   document.getElementById("recent").hidden = false;
 }
 
-// Show the share of each language, counted per repository.
+// Language share, counted per repo (lines of code was too much work)
 function showLanguages(repos) {
-  var counts = {}; // for example { JavaScript: 5, HTML: 2 }
+  var counts = {}; // like { JavaScript: 5, HTML: 2 }
   var total = 0;
 
   for (var i = 0; i < repos.length; i++) {
     var repo = repos[i];
-    // Only my own repos, and skip notebooks because they are mostly noise.
+    // only my own repos, notebooks are noise
     if (repo.fork || !repo.language || repo.language === "Jupyter Notebook") {
       continue;
     }
@@ -165,7 +165,7 @@ function showLanguages(repos) {
     total = total + 1;
   }
 
-  // Turn the counts into a list so we can sort it.
+  // object to list so it can sort
   var list = [];
   for (var language in counts) {
     list.push({ name: language, count: counts[language] });
@@ -196,7 +196,7 @@ function showLanguages(repos) {
   }
 }
 
-// Add "language, updated, stars" under the project cards that have a data-repo name.
+// language, updated, stars under the project cards
 function showProjectDetails(repos) {
   var cards = document.querySelectorAll("[data-repo]");
 
@@ -238,17 +238,17 @@ getJson("https://api.github.com/users/" + githubUser + "/repos?per_page=100")
     showProjectDetails(repos);
   })
   .catch(function () {
-    // Do nothing, the page keeps working without these.
+    // whatever, the page works without it
   });
 
 // ---------- Commit heat strip ----------
 
-// The data comes from a file that my profile repo updates every 6 hours.
-// It looks like { "start": "2026-06-01", "counts": [0, 0, 3, 1, ...] } with one number per day.
+// Data comes from my profile repo, refreshed every 6 hours
+// looks like { start: "2026-06-01", counts: [0, 0, 3, 1, ...] }, one number per day
 var activityUrl =
   "https://raw.githubusercontent.com/CaptainPancakeWithBacon/CaptainPancakeWithBacon/main/assets/activity.json";
 
-// Turn a number of commits into a color level from 0 (none) to 4 (a lot).
+// commits to color level. 0 is nothing, 4 is a lot
 function commitLevel(count) {
   if (count === 0) {
     return 0;
@@ -297,19 +297,19 @@ function showHeat(data) {
 getJson(activityUrl)
   .then(showHeat)
   .catch(function () {
-    // The file does not exist yet, so the strip just stays hidden.
+    // no file yet, strip stays hidden
   });
 
 // ---------- Now playing (Last.fm) ----------
 
-// Show one track in the music line.
+// One track into the music line
 function showTrack(track) {
   var element = document.getElementById("music");
   var link =
     '<a href="' + escapeHtml(track.url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(track.name) + "</a>";
   link = link + " by " + escapeHtml(track.artist["#text"]);
 
-  // Album cover: look for the medium size. Last.fm uses a gray star image when there is no cover, we skip that one.
+  // Album cover. Last.fm gives a gray star when there is none, skip that
   var coverHtml = "";
   var images = track.image || [];
   for (var i = 0; i < images.length; i++) {
@@ -321,7 +321,7 @@ function showTrack(track) {
     }
   }
 
-  // Is it playing right now, or is it an older track?
+  // playing right now or not?
   var text = "";
   if (track["@attr"] && track["@attr"].nowplaying) {
     text = '<span class="eq"><i></i><i></i><i></i></span>Listening to ' + link;
@@ -346,11 +346,11 @@ function loadMusic() {
       }
     })
     .catch(function () {
-      // Do nothing, the line just stays hidden.
+      // nothing, line stays hidden
     });
 }
 
 if (lastfmUser !== "" && lastfmKey !== "") {
   loadMusic();
-  setInterval(loadMusic, 30000); // check again every 30 seconds
+  setInterval(loadMusic, 30000); // check again every 30 sec
 }

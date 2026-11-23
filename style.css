@@ -9,7 +9,7 @@ dl {
 	margin: 0;
 }
 
-/* Same look as my GitHub profile card: dark, quiet, Inter, blue and green. */
+/* Same look as my github profile card. Dark, Inter, blue and green. Please do not touch. */
 :root {
 	--bg: #0d1117;
 	--panel: #161b22;
@@ -57,7 +57,7 @@ a:hover {
 	padding: 0 20px;
 }
 
-/* top bar */
+/* the bar at the top */
 .topbar {
 	border-bottom: 1px solid var(--border);
 }
@@ -95,7 +95,7 @@ a:hover {
 	text-decoration: none;
 }
 
-/* page */
+/* the actual page */
 h1 {
 	margin: 64px 0 8px;
 	font-size: 2rem;
