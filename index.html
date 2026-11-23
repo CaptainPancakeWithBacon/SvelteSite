@@ -38,14 +38,26 @@
       <div class="langbar" id="langbar"></div>
       <ul class="legend" id="legend"></ul>
     </div>
-    <p class="latest" id="latest" hidden></p>
-    <p class="latest" id="music" hidden></p>
+    <div class="heat" id="heat" hidden>
+      <div class="grid" id="grid"></div>
+      <p class="cap" id="heatcap"></p>
+    </div>
+    <div class="recent" id="recent" hidden>
+      <p class="cap">Recently pushed</p>
+      <ul id="recentlist"></ul>
+    </div>
+    <p class="music" id="music" hidden></p>
   </header>
 
   <section id="about">
     <h2>About</h2>
     <p>I'm in my second year of Software Engineering at HZ University of Applied Sciences. I got into tech because I like making something from nothing, and I learn fastest by building things and breaking them to see how they work. Web, games, cloud: if it's interesting, I'm in.</p>
     <p>Away from the keyboard you'll find me climbing, cooking, gardening or deep in a D&amp;D session.</p>
+    <dl class="now">
+      <dt>Building</dt><dd>loaf, a low-power shell for niri</dd>
+      <dt>Learning</dt><dd>Azure event pipelines, for CS2Stats</dd>
+      <dt>Playing</dt><dd>grand strategy, always</dd>
+    </dl>
   </section>
 
   <section id="projects">
@@ -117,6 +129,18 @@
     const d = Math.floor((Date.now() - new Date(iso)) / 864e5);
     return d < 1 ? "today" : d === 1 ? "yesterday" : d + " days ago";
   };
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const countUp = (id, to) => {
+    const el = document.getElementById(id);
+    if (reduced || !to) return (el.textContent = to);
+    const t0 = performance.now();
+    const step = (t) => {
+      const k = Math.min((t - t0) / 700, 1);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
   const colors = ["#58a6ff", "#3fb950", "#e07b28", "#7b5fc4", "#c8402f"];
 
   // Middelburg time
@@ -127,18 +151,19 @@
   setInterval(tick, 30000);
 
   get("users/" + user).then((u) => {
-    set("s-repos", u.public_repos);
-    set("s-followers", u.followers);
+    countUp("s-repos", u.public_repos);
+    countUp("s-followers", u.followers);
   }).catch(() => {});
 
   get("users/" + user + "/repos?per_page=100").then((repos) => {
-    set("s-stars", repos.reduce((n, r) => n + r.stargazers_count, 0));
+    countUp("s-stars", repos.reduce((n, r) => n + r.stargazers_count, 0));
 
-    // last push, ignoring the profile repo (that is just the card bot)
-    const last = repos.filter((r) => r.name !== user).sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at))[0];
-    const el = document.getElementById("latest");
-    el.innerHTML = 'Last push: <a href="' + last.html_url + '">' + last.name + "</a>, " + ago(last.pushed_at);
-    el.hidden = false;
+    // recent pushes, ignoring the profile repo (that is just the card bot)
+    const recent = repos.filter((r) => r.name !== user).sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at)).slice(0, 4);
+    document.getElementById("recentlist").innerHTML = recent
+      .map((r) => '<li><a href="' + r.html_url + '">' + r.name + "</a><span>" + ago(r.pushed_at) + "</span></li>")
+      .join("");
+    document.getElementById("recent").hidden = false;
 
     // languages by number of own repos
     const own = repos.filter((r) => !r.fork && r.language && r.language !== "Jupyter Notebook");
@@ -168,6 +193,27 @@
     });
   }).catch(() => {});
 
+  // Commit heat strip: assets/activity.json is written by the card script in my profile repo.
+  const renderHeat = (d) => {
+    const level = (n) => (n === 0 ? 0 : n === 1 ? 1 : n <= 3 ? 2 : n <= 6 ? 3 : 4);
+    const grid = document.getElementById("grid");
+    const start = new Date(d.start + "T00:00:00");
+    grid.style.aspectRatio = Math.ceil(d.counts.length / 7) + " / 7";
+    grid.innerHTML = d.counts
+      .map((n, i) => {
+        const day = new Date(start.getTime() + i * 864e5).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+        return '<i class="l' + level(n) + '" title="' + n + (n === 1 ? " commit, " : " commits, ") + day + '"></i>';
+      })
+      .join("");
+    const total = d.counts.reduce((a, b) => a + b, 0);
+    set("heatcap", total + " public commits in the last " + Math.ceil(d.counts.length / 7) + " weeks");
+    document.getElementById("heat").hidden = false;
+  };
+  fetch("https://raw.githubusercontent.com/CaptainPancakeWithBacon/CaptainPancakeWithBacon/main/assets/activity.json")
+    .then((r) => (r.ok ? r.json() : Promise.reject()))
+    .then(renderHeat)
+    .catch(() => {});
+
   // Now playing from Last.fm (Spotify scrobbles there). Fill these in to switch it on.
   // The API key is read-only and public by design, so it is fine in the page.
   const lastfm = { user: "SirAdolphus", key: "fc5db5a97c8f06566f3fe096547697e6" };
@@ -176,11 +222,14 @@
   const showTrack = (t) => {
     const el = document.getElementById("music");
     const link = '<a href="' + esc(t.url) + '" target="_blank" rel="noopener noreferrer">' + esc(t.name) + "</a> by " + esc(t.artist["#text"]);
-    if (t["@attr"] && t["@attr"].nowplaying) {
-      el.innerHTML = '<span class="live"></span>Listening to ' + link;
-    } else {
-      el.innerHTML = "Last played: " + link + ", " + ago(new Date(t.date.uts * 1000).toISOString());
-    }
+    const img = (t.image || []).find((i) => i.size === "medium");
+    const art = img && img["#text"] && !img["#text"].includes("2a96cbd8b46e442fc41c2b86b821562f")
+      ? '<img class="art" src="' + esc(img["#text"]) + '" alt="" width="40" height="40">'
+      : "";
+    const text = t["@attr"] && t["@attr"].nowplaying
+      ? '<span class="eq"><i></i><i></i><i></i></span>Listening to ' + link
+      : "Last played: " + link + ", " + ago(new Date(t.date.uts * 1000).toISOString());
+    el.innerHTML = art + "<span>" + text + "</span>";
     el.hidden = false;
   };
   const music = () =>
