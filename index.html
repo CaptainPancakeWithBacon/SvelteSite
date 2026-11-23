@@ -113,16 +113,13 @@
 
   get("users/" + user + "/repos?per_page=100").then((repos) => {
     set("s-stars", repos.reduce((n, r) => n + r.stargazers_count, 0));
-  }).catch(() => {});
-
-  get("users/" + user + "/events/public").then((events) => {
-    const push = events.find((e) => e.type === "PushEvent" && e.repo.name !== user + "/" + user);
-    if (!push) return;
-    const days = Math.floor((Date.now() - new Date(push.created_at)) / 864e5);
+    const last = repos
+      .filter((r) => r.name !== user)
+      .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at))[0];
+    const days = Math.floor((Date.now() - new Date(last.pushed_at)) / 864e5);
     const when = days < 1 ? "today" : days === 1 ? "yesterday" : days + " days ago";
-    const repo = push.repo.name.split("/")[1];
     const el = document.getElementById("latest");
-    el.innerHTML = 'Last push: <a href="https://github.com/' + push.repo.name + '">' + repo + "</a>, " + when;
+    el.innerHTML = 'Last push: <a href="' + last.html_url + '">' + last.name + "</a>, " + when;
     el.hidden = false;
   }).catch(() => {});
 </script>
