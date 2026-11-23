@@ -304,3 +304,29 @@ footer p {
 	margin: 0 0 8px;
 	font-size: 0.8rem;
 }
+
+.live {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	margin-right: 8px;
+	border-radius: 50%;
+	background: var(--green);
+	animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+	50% {
+		opacity: 0.35;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.live {
+		animation: none;
+	}
+}
+
+.latest + .latest {
+	margin-top: 4px;
+}

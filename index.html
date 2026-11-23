@@ -39,6 +39,7 @@
       <ul class="legend" id="legend"></ul>
     </div>
     <p class="latest" id="latest" hidden></p>
+    <p class="latest" id="music" hidden></p>
   </header>
 
   <section id="about">
@@ -166,6 +167,31 @@
       meta.hidden = false;
     });
   }).catch(() => {});
+
+  // Now playing from Last.fm (Spotify scrobbles there). Fill these in to switch it on.
+  // The API key is read-only and public by design, so it is fine in the page.
+  const lastfm = { user: "", key: "" };
+
+  const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const showTrack = (t) => {
+    const el = document.getElementById("music");
+    const link = '<a href="' + esc(t.url) + '" target="_blank" rel="noopener noreferrer">' + esc(t.name) + "</a> by " + esc(t.artist["#text"]);
+    if (t["@attr"] && t["@attr"].nowplaying) {
+      el.innerHTML = '<span class="live"></span>Listening to ' + link;
+    } else {
+      el.innerHTML = "Last played: " + link + ", " + ago(new Date(t.date.uts * 1000).toISOString());
+    }
+    el.hidden = false;
+  };
+  const music = () =>
+    fetch("https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&limit=1&format=json&user=" + lastfm.user + "&api_key=" + lastfm.key)
+      .then((r) => r.json())
+      .then((d) => d.recenttracks.track[0] && showTrack(d.recenttracks.track[0]))
+      .catch(() => {});
+  if (lastfm.user && lastfm.key) {
+    music();
+    setInterval(music, 30000);
+  }
 </script>
 </body>
 </html>
