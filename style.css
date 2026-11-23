@@ -221,3 +221,25 @@ footer .wrap {
 footer p {
 	margin: 0;
 }
+
+.card-img {
+	display: block;
+	width: 100%;
+	height: auto;
+	margin-top: 32px;
+	border-radius: 8px;
+}
+
+.card {
+	transition: border-color 0.15s;
+}
+
+.card:hover {
+	border-color: var(--blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.card {
+		transition: none;
+	}
+}
